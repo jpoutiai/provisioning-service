@@ -24,6 +24,8 @@ extern "C" {
 
 gboolean handle_exit(gpointer user_data);
 
+void send_signal(void);
+
 #ifdef __cplusplus
 }
 #endif
