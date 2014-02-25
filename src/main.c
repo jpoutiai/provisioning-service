@@ -154,10 +154,19 @@ error:
 	.out_args = _out_args, \
 	.function = _function, \
 
+#define GDBUS_SIGNAL(_name, _args) \
+	.name = _name, \
+	.args = _args
+
 static const GDBusMethodTable provisioning_methods[] = {
 	{ GDBUS_METHOD("HandleProvisioningMessage",
 				GDBUS_ARGS({ "provisioning_message", "ssuuiisay" }), NULL,
 				provisioning_handle_message) },
+	{ }
+};
+
+static const GDBusSignalTable provisioning_signals[] = {
+	{ GDBUS_SIGNAL("APNProvisioningReceived", NULL) },
 	{ }
 };
 
@@ -169,7 +178,9 @@ static gboolean provisioning_init(void)
 	LOG("provisioning_init:%p\n",conn);
 	ret = register_dbus_interface(conn, PROVISIONING_SERVICE_PATH,
 					PROVISIONING_SERVICE_INTERFACE,
-					provisioning_methods, NULL, NULL);
+					provisioning_methods,
+					provisioning_signals,
+					NULL, NULL);
 
 	return ret;
 }
