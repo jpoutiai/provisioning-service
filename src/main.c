@@ -51,6 +51,28 @@ gboolean handle_exit(gpointer user_data)
 	return FALSE;
 }
 
+void send_signal(void)
+{
+	DBusConnection *conn = provisioning_dbus_get_connection();
+	DBusMessage *msg;
+
+	LOG("send_signal");
+	msg = dbus_message_new_signal(PROVISIONING_SERVICE_PATH, // object name of the signal
+					PROVISIONING_SERVICE_INTERFACE, // interface name of the signal
+					"APNProvisioningReceived"); // name of the signal
+
+
+	if (msg == NULL)
+		goto out;
+
+	if (!dbus_connection_send(conn, msg, NULL))
+		goto out;
+
+	dbus_connection_flush(conn);
+out:
+	dbus_message_unref(msg);
+}
+
 static DBusMessage *provisioning_handle_message(DBusConnection *conn,
 					DBusMessage *msg, void *data)
 {
