@@ -85,6 +85,8 @@ static void clean_provisioning()
 	if (timer_id > 0)
 		g_source_remove(timer_id);
 
+	send_signal();
+
 	remove_modem();
 	clean_provisioning_data();
 	handle_exit(NULL);
