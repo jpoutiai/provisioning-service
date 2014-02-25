@@ -31,6 +31,7 @@
 struct interface_data {
 	char *name;
 	const GDBusMethodTable *methods;
+	const GDBusSignalTable *signal;
 	void *user_data;
 	GDBusDestroyFunction destroy;
 };
@@ -176,6 +177,7 @@ static DBusObjectPathVTable generic_table = {
 static gboolean add_interface(struct generic_data *data,
 				const char *name,
 				const GDBusMethodTable *methods,
+				const GDBusSignalTable *signal,
 				void *user_data,
 				GDBusDestroyFunction destroy)
 {
@@ -184,9 +186,10 @@ static gboolean add_interface(struct generic_data *data,
 	iface = g_new0(struct interface_data, 1);
 	iface->name = g_strdup(name);
 	iface->methods = methods;
+	iface->signal = signal;
 	iface->user_data = user_data;
 	iface->destroy = destroy;
-	/*This is a bit overkill as we only have onw interface*/
+	/*This is a bit overkill as we only have one interface*/
 	LOG("add_interface(iface->name:%s,iface->methods->name:%s)\n",
 			iface->name,iface->methods->name);
 	data->interfaces = g_slist_append(data->interfaces, iface);
@@ -273,6 +276,7 @@ static struct generic_data *object_path_ref(DBusConnection *connection,
 gboolean register_dbus_interface(DBusConnection *connection,
 					const char *path, const char *name,
 					const GDBusMethodTable *methods,
+					const GDBusSignalTable *signal,
 					void *user_data,
 					GDBusDestroyFunction destroy)
 {
@@ -283,7 +287,7 @@ gboolean register_dbus_interface(DBusConnection *connection,
 		return FALSE;
 	LOG("register_dbus_interface: %p\n",data->conn);
 
-	if (!add_interface(data, name, methods, user_data, destroy)) {
+	if (!add_interface(data, name, methods, signal, user_data, destroy)) {
 		object_path_unref(connection, path);
 		return FALSE;
 	}
