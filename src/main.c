@@ -61,7 +61,6 @@ gboolean handle_exit(gpointer user_data)
 		l = g_slist_last(msglist);
 
 	if (l != NULL) {
-		LOG("JPO removing l->data:%p",l->data);
 		req = l->data;
 		g_free(req->array);
 		g_free(req);
@@ -73,9 +72,10 @@ gboolean handle_exit(gpointer user_data)
 		LOG("provisioning_exit");
 	} else {
 		l = g_slist_last(msglist);
-		req = l->data;
-		LOG("JPO calling handle_message(%p,%d)",req->array,req->array_len);
-		handle_message(req->array,req->array_len);
+		if (l != NULL) {
+			req = l->data;
+			handle_message(req->array,req->array_len);
+		}
 	}
 
 	return FALSE;
@@ -111,7 +111,7 @@ static gboolean handle_message(char *array, int array_len)
 	if (array_len < 0)
 		goto error;
 
-#if 0 //used for testing
+#if 0 /*used for testing*/
 	char *file_name = "received_wbxml";
 	print_to_file(array, array_len, file_name);
 #endif
@@ -175,9 +175,15 @@ static DBusMessage *provisioning_handle_message(DBusConnection *conn,
 
 	dbus_message_iter_get_fixed_array(&subiter, &array, &array_len);
 
-	req = g_new0(struct provisioning_request, 1);
+	req = g_try_new0(struct provisioning_request, 1);
+	if (req == NULL)
+		goto error;
+
 	req->array_len = array_len;
-	req->array = g_try_new(char, req->array_len);
+	req->array = g_try_new0(char, req->array_len);
+	if (req->array == NULL)
+		goto error;
+
 	memcpy(req->array, array, req->array_len);
 
 	msglist = g_slist_prepend(msglist, req);
