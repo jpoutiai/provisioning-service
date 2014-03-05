@@ -118,7 +118,7 @@ static void set_context_property_reply(DBusPendingCall *call, void *user_data)
 	dbus_error_init(&err);
 
 	if (dbus_set_error_from_message(&err, reply) == TRUE) {
-		LOG("set_context_property_reply:%s: %s\n",
+		LOG("set_context_property_reply:%s: %s",
 			err.name, err.message);
 		dbus_error_free(&err);
 	}
@@ -142,7 +142,7 @@ static void deactivate_internet_context_reply(DBusPendingCall *call, void *user_
 	dbus_error_init(&err);
 
 	if (dbus_set_error_from_message(&err, reply) == TRUE) {
-		LOG("deactivate_internet_context_reply:%s: %s\n",
+		LOG("deactivate_internet_context_reply:%s: %s",
 			err.name, err.message);
 		dbus_error_free(&err);
 		dbus_message_unref(reply);
@@ -184,7 +184,7 @@ static void deactivate_mms_context_reply(DBusPendingCall *call, void *user_data)
 	dbus_error_init(&err);
 
 	if (dbus_set_error_from_message(&err, reply) == TRUE) {
-		LOG("deactivate_mms_context_reply:%s: %s\n",
+		LOG("deactivate_mms_context_reply:%s: %s",
 			err.name, err.message);
 		dbus_error_free(&err);
 		dbus_message_unref(reply);
@@ -291,7 +291,7 @@ static void add_mms_context_reply(DBusPendingCall *call, void *user_data)
 	dbus_error_init(&err);
 
 	if (dbus_set_error_from_message(&err, reply) == TRUE) {
-		LOG("add_mms_context_reply:%s: %s\n",
+		LOG("add_mms_context_reply:%s: %s",
 			err.name, err.message);
 		dbus_error_free(&err);
 	}
@@ -331,7 +331,7 @@ static void add_internet_context_reply(DBusPendingCall *call, void *user_data)
 	dbus_error_init(&err);
 
 	if (dbus_set_error_from_message(&err, reply) == TRUE) {
-		LOG("add_internet_context_reply:%s: %s\n",
+		LOG("add_internet_context_reply:%s: %s",
 			err.name, err.message);
 		dbus_error_free(&err);
 	}
@@ -730,7 +730,7 @@ static void get_contexts_reply(DBusPendingCall *call, void *user_data)
 	LOG("get_contexts_reply");
 
 	if (dbus_set_error_from_message(&err, reply) == TRUE) {
-		LOG("get_contexts_reply:%s: %s\n",
+		LOG("get_contexts_reply:%s: %s",
 			err.name, err.message);
 		dbus_error_free(&err);
 		goto done;
@@ -819,7 +819,7 @@ static void get_gprs_properties_reply(DBusPendingCall *call, void *user_data)
 	dbus_error_init(&err);
 
 	if (dbus_set_error_from_message(&err, reply) == TRUE) {
-		LOG("get_gprs_properties_reply:%s: %s\n",
+		LOG("get_gprs_properties_reply:%s: %s",
 			err.name, err.message);
 		dbus_error_free(&err);
 		goto done;
@@ -1027,7 +1027,7 @@ static void get_modems_reply(DBusPendingCall *call, void *user_data)
 	dbus_error_init(&err);
 
 	if (dbus_set_error_from_message(&err, reply) == TRUE) {
-		LOG("get_modems_reply:%s: %s\n",
+		LOG("get_modems_reply:%s: %s",
 			err.name, err.message);
 		dbus_error_free(&err);
 		goto done;
