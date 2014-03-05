@@ -166,7 +166,7 @@ static DBusMessage *provisioning_handle_message(DBusConnection *conn,
 		goto error;
 
 	if (dbus_message_iter_get_element_type(&iter) != DBUS_TYPE_BYTE) {
-		LOG("Ignoring dbus request because request element type=%c\n",
+		LOG("Ignoring dbus request because request element type=%c",
 			dbus_message_iter_get_element_type(&iter));
 		goto error;
 	}
@@ -230,7 +230,7 @@ static gboolean provisioning_init(void)
 	DBusConnection *conn = provisioning_dbus_get_connection();
 	gboolean ret;
 
-	LOG("provisioning_init:%p\n",conn);
+	LOG("provisioning_init:%p",conn);
 	ret = register_dbus_interface(conn, PROVISIONING_SERVICE_PATH,
 					PROVISIONING_SERVICE_INTERFACE,
 					provisioning_methods,
@@ -295,11 +295,11 @@ int main( int argc, char **argv )
 	conn = setup_dbus_bus(DBUS_BUS_SYSTEM, PROVISIONING_SERVICE, &err);
 	if (conn == NULL) {
 		if (dbus_error_is_set(&err) == TRUE) {
-			LOG("Unable to hop onto D-Bus: %s\n",
+			LOG("Unable to hop onto D-Bus: %s",
 					err.message);
 			dbus_error_free(&err);
 		} else {
-			LOG("Unable to hop onto D-Bus\n");
+			LOG("Unable to hop onto D-Bus");
 		}
 
 		goto cleanup;
@@ -307,7 +307,7 @@ int main( int argc, char **argv )
 
 	dbus_provisioning_set_connection(conn);
 	if(!provisioning_init())
-		LOG("provisioning_init failed!\n");
+		LOG("provisioning_init failed!");
 
 	g_main_loop_run(loop);
 
