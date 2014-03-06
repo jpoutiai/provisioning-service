@@ -215,8 +215,8 @@ error:
 
 static const GDBusMethodTable provisioning_methods[] = {
 	{ GDBUS_METHOD("HandleProvisioningMessage",
-				GDBUS_ARGS({ "provisioning_message", "ssuuiisay" }), NULL,
-				provisioning_handle_message) },
+			GDBUS_ARGS({ "provisioning_message", "ssuuiisay" }),
+			NULL, provisioning_handle_message) },
 	{ }
 };
 
@@ -264,10 +264,7 @@ int main( int argc, char **argv )
 	DBusError err;
 
 	context = g_option_context_new(NULL);
-/*
- * If need for arguments add
- * g_option_context_add_main_entries(context, entries, NULL);
- */
+
 	g_option_context_add_main_entries(context, entries, NULL);
 	if (g_option_context_parse(context, &argc, &argv, &error) == FALSE) {
 		if (error != NULL) {
@@ -291,7 +288,7 @@ int main( int argc, char **argv )
 	msglist = NULL;
 
 	dbus_error_init(&err);
-	// connect to the bus and check for errors
+	/* connect to the bus and check for errors. */
 	conn = setup_dbus_bus(DBUS_BUS_SYSTEM, PROVISIONING_SERVICE, &err);
 	if (conn == NULL) {
 		if (dbus_error_is_set(&err) == TRUE) {
