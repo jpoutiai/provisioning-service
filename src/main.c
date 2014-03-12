@@ -81,15 +81,29 @@ gboolean handle_exit(gpointer user_data)
 	return FALSE;
 }
 
-void send_signal(void)
+void send_signal(guint message)
 {
 	DBusConnection *conn = provisioning_dbus_get_connection();
 	DBusMessage *msg;
+	const char *name;
 
 	LOG("send_signal");
+
+	switch (message) {
+	case PROV_SUCCESS:
+		name = "apnProvisioningSucceeded";
+		break;
+	case PROV_PARTIAL_SUCCESS:
+		name = "apnProvisioningPartiallySucceeded";
+		break;
+	default:
+		name = "apnProvisioningFailed";
+		break;
+	}
+
 	msg = dbus_message_new_signal(PROVISIONING_SERVICE_PATH, // object name of the signal
 					PROVISIONING_SERVICE_INTERFACE, // interface name of the signal
-					"APNProvisioningReceived"); // name of the signal
+					name); // name of the signal
 
 
 	if (msg == NULL)
@@ -116,7 +130,8 @@ static gboolean handle_message(char *array, int array_len)
 	print_to_file(array, array_len, file_name);
 #endif
 
-	if (!decode_provisioning_wbxml(array, array_len))
+	if (!decode_provisioning_wbxml(array, array_len)) {
+		send_signal(PROV_FAILURE);
 		goto error;
 
 	if (provisioning_init_ofono() < 0) {
@@ -221,7 +236,9 @@ static const GDBusMethodTable provisioning_methods[] = {
 };
 
 static const GDBusSignalTable provisioning_signals[] = {
-	{ GDBUS_SIGNAL("APNProvisioningReceived", NULL) },
+	{ GDBUS_SIGNAL("apnProvisioningSucceeded", NULL) },
+	{ GDBUS_SIGNAL("apnProvisioningPartiallySucceeded", NULL) },
+	{ GDBUS_SIGNAL("apnProvisioningFailed", NULL) },
 	{ }
 };
 
