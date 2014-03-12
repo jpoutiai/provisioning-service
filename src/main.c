@@ -111,7 +111,7 @@ static gboolean handle_message(char *array, int array_len)
 	if (array_len < 0)
 		goto error;
 
-#if 0 /*used for testing*/
+#ifdef FILEWRITE
 	char *file_name = "received_wbxml";
 	print_to_file(array, array_len, file_name);
 #endif
