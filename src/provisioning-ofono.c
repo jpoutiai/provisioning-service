@@ -118,15 +118,22 @@ static void set_context_property_reply(DBusPendingCall *call, void *user_data)
 
 	dbus_error_init(&err);
 
-	if (signal_prov != PROV_PARTIAL_SUCCESS)
-		signal_prov = PROV_SUCCESS;
+
 
 	if (dbus_set_error_from_message(&err, reply) == TRUE) {
 		LOG("set_context_property_reply:%s: %s",
 			err.name, err.message);
 		dbus_error_free(&err);
-		signal_prov = PROV_PARTIAL_SUCCESS;
+
+		if (signal_prov == PROV_SUCCESS)
+			signal_prov = PROV_PARTIAL_SUCCESS;
+
+		if (signal_prov == PROV_FAILURE)
+			failure = TRUE;
 	}
+
+	if ((signal_prov == PROV_FAILURE) && (failure == FALSE))
+		signal_prov = PROV_SUCCESS;
 
 	dbus_message_unref(reply);
 

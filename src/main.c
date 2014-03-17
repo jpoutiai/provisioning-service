@@ -105,7 +105,6 @@ void send_signal(guint message)
 					PROVISIONING_SERVICE_INTERFACE, // interface name of the signal
 					name); // name of the signal
 
-
 	if (msg == NULL)
 		goto out;
 
@@ -133,6 +132,7 @@ static gboolean handle_message(char *array, int array_len)
 	if (!decode_provisioning_wbxml(array, array_len)) {
 		send_signal(PROV_FAILURE);
 		goto error;
+	}
 
 	if (provisioning_init_ofono() < 0) {
 		provisioning_exit_ofono();
